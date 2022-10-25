@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+src/treds_query_builder/__init__.py
+src/treds_query_builder/filtering.py
+src/treds_query_builder/parsing.py
+src/treds_query_builder/sorting.py
+src/treds_query_builder.egg-info/PKG-INFO
+src/treds_query_builder.egg-info/SOURCES.txt
+src/treds_query_builder.egg-info/dependency_links.txt
+src/treds_query_builder.egg-info/requires.txt
+src/treds_query_builder.egg-info/top_level.txt
