@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: treds-query-builder
-Version: 0.1.0
+Version: 1.0.0
 Summary: Utility library to build QueryBuilder filters and sorts
 Author-email: Manuel Gallina <manuel.gallina@3ds.team>
 Classifier: Programming Language :: Python :: 3
@@ -12,7 +12,11 @@ Description-Content-Type: text/markdown
 
 ## Build
 
-In the project root folder, using the venv interpreter:
+Comandi per la build del package:
 
     python -m pip install --upgrade build
     python -m build
+
+## Docs
+
+https://www.notion.so/3dsteam/API-Query-Builder-fd6b2a7e17a3441eacbd397709734ec2
