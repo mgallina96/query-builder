@@ -19,10 +19,11 @@ def apply_sorting(
         :param default_sorting: default set of sorting rules to apply.
         :return: the SqlAlchemy queries with the sort applied
         """
+
+    if not sorting_rules or len(sorting_rules) == 0:
+        sorting_rules = default_sorting
     if not isinstance(sorting_rules, list):
         raise ApiSortingSyntaxError("Sorting rules must be a list")
-    if len(sorting_rules) == 0:
-        sorting_rules = default_sorting
     compiled_rules = []
     for rule in sorting_rules:
         if "property" not in rule:
