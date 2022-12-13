@@ -156,3 +156,11 @@ def apply_filters(
         query.where(where_statement).params(query_params)
         for query in queries
     ])
+
+
+def join_filters(*filters: str | dict, condition: str = "and") -> dict:
+    return {
+        "condition": condition,
+        "rules": [json.loads(f) if isinstance(f, str) else f for f in filters if f]
+    }
+
