@@ -10,7 +10,7 @@ def _compile_simple_rule(
         filters: dict,
         fields_map: dict,
         params: dict,
-        index: int,
+        indexes: dict[str, int],
         transformations: dict[str, Callable]):
     transformations = transformations or {}
     if "field" not in filters:
@@ -33,7 +33,11 @@ def _compile_simple_rule(
         if filters["field"] in transformations:
             value = transformations[filters["field"]](value)
 
-    param_name = f"{filters['field']}_{index}"
+    if filters['field'] not in indexes:
+        indexes |= {filters['field']: 0}
+    param_name = f"{filters['field']}_{indexes[filters['field']]}"
+    indexes[filters['field']] += 1
+
     try:
         match operator:
             case "equal":
@@ -86,13 +90,13 @@ def _compile_simple_rule(
                 statement = func.trim(field) != ''
             case "any":
                 if value is not None:
-                    inner_statement, params = _compile_filters(value, fields_map, params, index, transformations)
+                    inner_statement, params = _compile_filters(value, fields_map, params, indexes, transformations)
                 else:
                     inner_statement = text("1 = 1")
                 statement = field.any(inner_statement)
             case "all":
                 if value is not None:
-                    inner_statement, params = _compile_filters(value, fields_map, params, index, transformations)
+                    inner_statement, params = _compile_filters(value, fields_map, params, indexes, transformations)
                 else:
                     inner_statement = text("1 = 1")
                 statement = not_(field.any(not_(inner_statement)))
@@ -103,9 +107,15 @@ def _compile_simple_rule(
     return statement, params
 
 
-def _compile_filters(filters: dict, fields_map: dict, params: dict, index: int, transformations: dict[str, Callable]):
+def _compile_filters(
+        filters: dict,
+        fields_map: dict,
+        params: dict,
+        indexes: dict[str, int],
+        transformations: dict[str, Callable]
+):
     if "operator" in filters:
-        return _compile_simple_rule(filters, fields_map, params, index, transformations)
+        return _compile_simple_rule(filters, fields_map, params, indexes, transformations)
     else:
         if "condition" not in filters:
             raise ApiFiltersSyntaxError(f"Missing required 'condition' property")
@@ -122,7 +132,7 @@ def _compile_filters(filters: dict, fields_map: dict, params: dict, index: int, 
         if "rules" not in filters:
             raise ApiFiltersSyntaxError(f"Missing required 'rules' property")
         for rule in filters["rules"]:
-            statement, params = _compile_filters(rule, fields_map, params, index, transformations)
+            statement, params = _compile_filters(rule, fields_map, params, indexes, transformations)
             compiled_rules.append(statement)
 
         if filters["condition"] == "not" and len(compiled_rules) != 1:
@@ -151,7 +161,7 @@ def apply_filters(
     if not filters:
         return tuple(queries)
     where_statement, query_params = _compile_filters(
-        filters, fields_map, {}, 0, transformations)
+        filters, fields_map, {}, {}, transformations)
     return tuple([
         query.where(where_statement).params(query_params)
         for query in queries

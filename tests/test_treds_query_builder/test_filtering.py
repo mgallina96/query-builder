@@ -23,6 +23,13 @@ from treds_query_builder.filtering import apply_filters, join_filters
                 {"field": "username", "operator": "equal", "value": "test"}
             ]},
             "SELECT * from TestEntity \nWHERE :id_0 = TestEntity.id AND :username_0 = TestEntity.username"
+    ),
+    (
+            {"condition": "and", "rules": [
+                {"field": "username", "operator": "equal", "value": "test1"},
+                {"field": "username", "operator": "equal", "value": "test2"}
+            ]},
+            "SELECT * from TestEntity \nWHERE :username_0 = TestEntity.username AND :username_1 = TestEntity.username"
     )
 ])
 def test_apply_filters(filters: dict[str, Any], expected_result: str):
