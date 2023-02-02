@@ -152,11 +152,11 @@ def apply_filters(
     Parse the filter rules and build the SQL where statements to append
     to the given SqlAlchemy queries.
 
-    :param filters: the filter rules to build.
-    :param fields_map: the mapping between the 'field' inside the rule and the SqlAlchemy Column.
-    :param queries: the SqlAlchemy queries to process.
-    :param transformations: functions to transform the 'value' of the rules.
-    :return: the SqlAlchemy queries with the filters applied
+    :param filters: The filter rules to build.
+    :param fields_map: The mapping between the 'field' inside the rule and the SqlAlchemy Column.
+    :param queries: The SqlAlchemy queries to process.
+    :param transformations: Functions to transform the 'value' of the rules.
+    :return: The SqlAlchemy queries with the filters applied
     """
     if not filters:
         return tuple(queries)
@@ -173,4 +173,7 @@ def join_filters(*filters: str | dict, condition: str = "and") -> dict:
         "condition": condition,
         "rules": [json.loads(f) if isinstance(f, str) else f for f in filters if f]
     }
+
+def string_join_filters(*filters: str | dict, condition: str = "and") -> str:
+    return json.dumps(join_filters(*filters, condition))
 
