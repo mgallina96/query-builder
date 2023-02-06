@@ -22,6 +22,10 @@ from treds_query_builder.sorting import apply_sorting
     (
             [],
             "SELECT * from TestEntity ORDER BY TestEntity.id"
+    ),
+    (
+            [{"field": "username"}, {"field": "id", "direction": "asc"}],
+            "SELECT * from TestEntity ORDER BY TestEntity.username, TestEntity.id"
     )
 ])
 def test_apply_sorting(sorting_rules: list[dict], expected_result: str):

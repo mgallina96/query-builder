@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: treds-query-builder
-Version: 1.2.0
+Version: 1.3.0
 Summary: Utility library to build QueryBuilder filters and sorts
 Author-email: Manuel Gallina <manuel.gallina@3ds.team>
 Classifier: Programming Language :: Python :: 3

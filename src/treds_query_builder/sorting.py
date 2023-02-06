@@ -13,11 +13,11 @@ def apply_sorting(
         Parse the sort rules and build the SQL order by statement to append
         to the given SqlAlchemy queries.
 
-        :param sorting_rules: the sort rules to build.
-        :param fields_map: the mapping between the 'property' inside the rule and the SqlAlchemy Column.
-        :param queries: the SqlAlchemy queries to process.
-        :param default_sorting: default set of sorting rules to apply.
-        :return: the SqlAlchemy queries with the sort applied
+        :param sorting_rules: The sort rules to build.
+        :param fields_map: The mapping between the 'field' inside the rule and the SqlAlchemy Column.
+        :param queries: The SqlAlchemy queries to process.
+        :param default_sorting: Default set of sorting rules to apply.
+        :return: The SqlAlchemy queries with the sort applied
         """
 
     if not sorting_rules or len(sorting_rules) == 0:
@@ -26,17 +26,19 @@ def apply_sorting(
         raise ApiSortingSyntaxError("Sorting rules must be a list")
     compiled_rules = []
     for rule in sorting_rules:
-        if "property" not in rule:
-            raise ApiSortingSyntaxError(f"Missing required 'property' property")
-        if rule["property"] not in fields_map:
-            raise ApiSortingSyntaxError(f"Invalid field name '{rule['property']}'")
+        if "property" in rule:
+            rule |= {"field": rule.pop("property")}
+        if "field" not in rule:
+            raise ApiSortingSyntaxError(f"Missing required 'field' property")
+        if rule["field"] not in fields_map:
+            raise ApiSortingSyntaxError(f"Invalid field name '{rule['field']}'")
         direction = rule["direction"] if "direction" in rule else "asc"
         try:
             match direction.lower():
                 case "asc" | None:
-                    compiled_rules.append(fields_map[rule["property"]])
+                    compiled_rules.append(fields_map[rule["field"]])
                 case "desc":
-                    compiled_rules.append(fields_map[rule["property"]].desc())
+                    compiled_rules.append(fields_map[rule["field"]].desc())
                 case _:
                     raise ApiSortingSyntaxError(f"Invalid direction '{direction}'")
         except NotImplementedError:

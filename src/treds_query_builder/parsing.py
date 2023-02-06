@@ -13,9 +13,9 @@ def parse_query_id_fields(
 
     Not valid examples: 'UserId', 'uuid', 'id.user'
 
-    :param query: the query to process.
-    :param decode_function: the function to apply.
-    :return: the query with the id values replaced.
+    :param query: The query to process.
+    :param decode_function: The function to apply.
+    :return: The query with the id values replaced.
     """
     if "rules" in query:
         for i in range(len(query["rules"])):
