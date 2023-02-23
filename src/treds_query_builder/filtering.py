@@ -175,5 +175,5 @@ def join_filters(*filters: str | dict, condition: str = "and") -> dict:
     }
 
 def string_join_filters(*filters: str | dict, condition: str = "and") -> str:
-    return json.dumps(join_filters(*filters, condition))
+    return json.dumps(join_filters(*filters, condition=condition))
 
