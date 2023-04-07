@@ -18,7 +18,7 @@ def parse_query_id_fields(
     :return: The query with the id values replaced.
     """
     if "rules" in query:
-        for i in range(len(query["rules"])):
+        for _ in range(len(query["rules"])):
             query["rules"].append(parse_query_id_fields(
                 query["rules"].pop(0), decode_function))
     elif query["field"] and "value" in query:
