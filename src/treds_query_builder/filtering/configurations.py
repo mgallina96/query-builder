@@ -1,5 +1,6 @@
-from treds_query_builder.filtering import CompilationConfig
-from treds_query_builder.filtering.models import FieldMap
+from typing import Callable
+
+from treds_query_builder.filtering.models import FieldMap, CompilationConfig
 from treds_query_builder.filtering.models.conditions import (
     AndCondition,
     NotCondition,
@@ -77,3 +78,19 @@ def default_filters_config(fields_mapping: list[FieldMap]) -> CompilationConfig:
         operators=default_all_operators,
         syntax_types=[ComplexFilterRule, SimpleFilterRule],
     )
+
+
+def from_legacy_params(
+    fields_map: dict, transformations: dict[str, Callable] | None
+) -> CompilationConfig:
+    fields_mapping = [
+        FieldMap(
+            name=field_name,
+            database_column=fields_map.get(field_name),
+            transform_function=transformations.get(field_name)
+            if transformations
+            else None,
+        )
+        for field_name in fields_map
+    ]
+    return default_filters_config(fields_mapping)

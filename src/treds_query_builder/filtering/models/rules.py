@@ -1,6 +1,6 @@
 from typing import Any
 
-from treds_query_builder.filtering import AbstractFilterRule, CompilationConfig, CompilationContext
+from treds_query_builder.filtering.models import AbstractFilterRule, CompilationConfig, CompilationContext
 
 
 class SimpleFilterRule(AbstractFilterRule):
