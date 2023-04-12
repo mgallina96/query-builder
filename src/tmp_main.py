@@ -1,37 +1,27 @@
 from sqlalchemy import select, text
 
-from treds_query_builder.models.conditions import AndCondition
-from treds_query_builder.models.filtering import (
-    CompilationConfig,
-    CompilationContext,
-    ComplexFilterRule,
-    FieldMap,
-    SimpleFilterRule,
-)
-from treds_query_builder.models.operators import EqualsOperator, LikeOperator
+from treds_query_builder.filtering import apply_filters
+from treds_query_builder.filtering.configurations import default_filters_config
+from treds_query_builder.filtering.models import FieldMap
 
 if __name__ == "__main__":
-    configuration = CompilationConfig(
-        fields_mapping=[
+    config = default_filters_config(
+        [
             FieldMap("id", text("TestEntity.id")),
             FieldMap("username", text("TestEntity.username")),
-        ],
-        conditions=[AndCondition()],
-        operators=[EqualsOperator(), LikeOperator()],
+        ]
+    )
+    query = select(text("* from TestEntity"))
+    (query,) = apply_filters(
+        {
+            "condition": "and",
+            "rules": [
+                {"field": "id", "operator": "equal", "value": 1},
+                {"field": "username", "operator": "equal", "value": "test"},
+            ],
+        },
+        config,
+        query,
     )
 
-    query_builder_filter = ComplexFilterRule(
-        "and",
-        [
-            SimpleFilterRule("id", "equal", 1),
-            SimpleFilterRule("username", "equal", "test"),
-        ],
-    )
-    compilation_context = CompilationContext()
-    statement = query_builder_filter.compile(configuration, compilation_context)
-    query = (
-        select(text("* from TestEntity"))
-        .where(statement)
-        .params(compilation_context.params)
-    )
     print(str(query))
