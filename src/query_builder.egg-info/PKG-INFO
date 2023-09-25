@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: query-builder
-Version: 1.0.0
+Version: 2.0.0
 Summary: Utility library to build QueryBuilder filters and sorts
 Author-email: Manuel Gallina <manuel.gallina@3ds.team>
 Classifier: Programming Language :: Python :: 3
