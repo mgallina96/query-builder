@@ -1,17 +1,45 @@
+from enum import Enum
 from typing import Any
 
 from sqlalchemy import bindparam, func, not_, text
 
-from treds_query_builder.filtering.models import (
+from query_builder.filtering.models import (
     AbstractOperator,
     CompilationConfig,
     CompilationContext,
-    FieldMap,
 )
+from query_builder.shared.models import FieldMap
+
+
+class Operators(Enum):
+    EQUAL = "equal"
+    IEQUAL = "iequal"
+    LIKE = "like"
+    ILIKE = "ilike"
+    NOTEQUAL = "notequal"
+    INOTEQUAL = "inotequal"
+    CONTAINS = "contains"
+    ICONTAINS = "icontains"
+    IN = "in"
+    NOTIN = "notin"
+    GREATERTHAN = "greaterthan"
+    GREATERTHANOREQUAL = "greaterthanorequal"
+    LESSTHAN = "lessthan"
+    LESSTHANOREQUAL = "lessthanorequal"
+    ISNULL = "isnull"
+    ISNOTNULL = "isnotnull"
+    ISEMPTY = "isempty"
+    ISNOTEMPTY = "isnotempty"
+    STARTSWITH = "startswith"
+    ISTARTSWITH = "istartswith"
+    ENDSWITH = "endswith"
+    IENDSWITH = "iendswith"
+    ANY = "any"
+    ALL = "all"
 
 
 class EqualsOperator(AbstractOperator):
-    def __init__(self, code: str = "equal"):
+    def __init__(self, code: str = Operators.EQUAL.value):
         super().__init__(code)
 
     def apply(
@@ -27,7 +55,7 @@ class EqualsOperator(AbstractOperator):
 
 
 class CaseInsensitiveEqualsOperator(AbstractOperator):
-    def __init__(self, code: str = "iequal"):
+    def __init__(self, code: str = Operators.IEQUAL.value):
         super().__init__(code)
 
     def apply(
@@ -43,7 +71,7 @@ class CaseInsensitiveEqualsOperator(AbstractOperator):
 
 
 class LikeOperator(AbstractOperator):
-    def __init__(self, code: str = "like"):
+    def __init__(self, code: str = Operators.LIKE.value):
         super().__init__(code)
 
     def apply(
@@ -59,7 +87,7 @@ class LikeOperator(AbstractOperator):
 
 
 class CaseInsensitiveLikeOperator(AbstractOperator):
-    def __init__(self, code: str = "ilike"):
+    def __init__(self, code: str = Operators.ILIKE.value):
         super().__init__(code)
 
     def apply(
@@ -75,7 +103,7 @@ class CaseInsensitiveLikeOperator(AbstractOperator):
 
 
 class NotEqualsOperator(AbstractOperator):
-    def __init__(self, code: str = "notequal"):
+    def __init__(self, code: str = Operators.NOTEQUAL.value):
         super().__init__(code)
 
     def apply(
@@ -91,7 +119,7 @@ class NotEqualsOperator(AbstractOperator):
 
 
 class CaseInsensitiveNotEqualsOperator(AbstractOperator):
-    def __init__(self, code: str = "inotequal"):
+    def __init__(self, code: str = Operators.INOTEQUAL.value):
         super().__init__(code)
 
     def apply(
@@ -107,7 +135,7 @@ class CaseInsensitiveNotEqualsOperator(AbstractOperator):
 
 
 class ContainsOperator(AbstractOperator):
-    def __init__(self, code: str = "contains"):
+    def __init__(self, code: str = Operators.CONTAINS.value):
         super().__init__(code)
 
     def apply(
@@ -123,7 +151,7 @@ class ContainsOperator(AbstractOperator):
 
 
 class CaseInsensitiveContainsOperator(AbstractOperator):
-    def __init__(self, code: str = "icontains"):
+    def __init__(self, code: str = Operators.ICONTAINS.value):
         super().__init__(code)
 
     def apply(
@@ -139,7 +167,7 @@ class CaseInsensitiveContainsOperator(AbstractOperator):
 
 
 class InOperator(AbstractOperator):
-    def __init__(self, code: str = "in"):
+    def __init__(self, code: str = Operators.IN.value):
         super().__init__(code)
 
     def apply(
@@ -153,7 +181,7 @@ class InOperator(AbstractOperator):
 
 
 class NotInOperator(AbstractOperator):
-    def __init__(self, code: str = "notin"):
+    def __init__(self, code: str = Operators.NOTIN.value):
         super().__init__(code)
 
     def apply(
@@ -167,7 +195,7 @@ class NotInOperator(AbstractOperator):
 
 
 class GreaterThanOperator(AbstractOperator):
-    def __init__(self, code: str = "greaterthan"):
+    def __init__(self, code: str = Operators.GREATERTHAN.value):
         super().__init__(code)
 
     def apply(
@@ -181,7 +209,7 @@ class GreaterThanOperator(AbstractOperator):
 
 
 class GreaterThanOrEqualOperator(AbstractOperator):
-    def __init__(self, code: str = "greaterthanorequal"):
+    def __init__(self, code: str = Operators.GREATERTHANOREQUAL.value):
         super().__init__(code)
 
     def apply(
@@ -197,7 +225,7 @@ class GreaterThanOrEqualOperator(AbstractOperator):
 
 
 class LessThanOperator(AbstractOperator):
-    def __init__(self, code: str = "lessthan"):
+    def __init__(self, code: str = Operators.LESSTHAN.value):
         super().__init__(code)
 
     def apply(
@@ -211,7 +239,7 @@ class LessThanOperator(AbstractOperator):
 
 
 class LessThanOrEqualOperator(AbstractOperator):
-    def __init__(self, code: str = "lessthanorequal"):
+    def __init__(self, code: str = Operators.LESSTHANOREQUAL.value):
         super().__init__(code)
 
     def apply(
@@ -227,7 +255,7 @@ class LessThanOrEqualOperator(AbstractOperator):
 
 
 class IsNullOperator(AbstractOperator):
-    def __init__(self, code: str = "isnull"):
+    def __init__(self, code: str = Operators.ISNULL.value):
         super().__init__(code)
 
     def apply(
@@ -241,7 +269,7 @@ class IsNullOperator(AbstractOperator):
 
 
 class IsNotNullOperator(AbstractOperator):
-    def __init__(self, code: str = "isnotnull"):
+    def __init__(self, code: str = Operators.ISNOTNULL.value):
         super().__init__(code)
 
     def apply(
@@ -255,7 +283,7 @@ class IsNotNullOperator(AbstractOperator):
 
 
 class IsEmptyOperator(AbstractOperator):
-    def __init__(self, code: str = "isempty"):
+    def __init__(self, code: str = Operators.ISEMPTY.value):
         super().__init__(code)
 
     def apply(
@@ -269,7 +297,7 @@ class IsEmptyOperator(AbstractOperator):
 
 
 class IsNotEmptyOperator(AbstractOperator):
-    def __init__(self, code: str = "isnotempty"):
+    def __init__(self, code: str = Operators.ISNOTEMPTY.value):
         super().__init__(code)
 
     def apply(
@@ -283,7 +311,7 @@ class IsNotEmptyOperator(AbstractOperator):
 
 
 class StartsWithOperator(AbstractOperator):
-    def __init__(self, code: str = "startswith"):
+    def __init__(self, code: str = Operators.STARTSWITH.value):
         super().__init__(code)
 
     def apply(
@@ -299,7 +327,7 @@ class StartsWithOperator(AbstractOperator):
 
 
 class CaseInsensitiveStartsWithOperator(AbstractOperator):
-    def __init__(self, code: str = "istartswith"):
+    def __init__(self, code: str = Operators.ISTARTSWITH.value):
         super().__init__(code)
 
     def apply(
@@ -315,7 +343,7 @@ class CaseInsensitiveStartsWithOperator(AbstractOperator):
 
 
 class EndsWithOperator(AbstractOperator):
-    def __init__(self, code: str = "endswith"):
+    def __init__(self, code: str = Operators.ENDSWITH.value):
         super().__init__(code)
 
     def apply(
@@ -331,7 +359,7 @@ class EndsWithOperator(AbstractOperator):
 
 
 class CaseInsensitiveEndsWithOperator(AbstractOperator):
-    def __init__(self, code: str = "iendswith"):
+    def __init__(self, code: str = Operators.IENDSWITH.value):
         super().__init__(code)
 
     def apply(
@@ -347,7 +375,7 @@ class CaseInsensitiveEndsWithOperator(AbstractOperator):
 
 
 class AnyOperator(AbstractOperator):
-    def __init__(self, code: str = "any"):
+    def __init__(self, code: str = Operators.ANY.value):
         super().__init__(code)
 
     def apply(
@@ -364,7 +392,7 @@ class AnyOperator(AbstractOperator):
 
 
 class AllOperator(AbstractOperator):
-    def __init__(self, code: str = "all"):
+    def __init__(self, code: str = Operators.ALL.value):
         super().__init__(code)
 
     def apply(

@@ -1,0 +1,2 @@
+class QueryBuilderSortSyntaxError(Exception):
+    pass

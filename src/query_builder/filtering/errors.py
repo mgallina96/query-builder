@@ -1,0 +1,2 @@
+class QueryBuilderFiltersSyntaxError(Exception):
+    pass

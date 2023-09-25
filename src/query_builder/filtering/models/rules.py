@@ -1,6 +1,10 @@
 from typing import Any
 
-from treds_query_builder.filtering.models import AbstractFilterRule, CompilationConfig, CompilationContext
+from query_builder.filtering.models import (
+    AbstractFilterRule,
+    CompilationConfig,
+    CompilationContext,
+)
 
 
 class SimpleFilterRule(AbstractFilterRule):
@@ -14,6 +18,7 @@ class SimpleFilterRule(AbstractFilterRule):
         self.value = value
 
     def compile(self, config: CompilationConfig, context: CompilationContext):
+        context.included_fields.add(self.field)
         field_map = config.get_field(self.field)
         return config.get_operator(self.operator).apply(
             config, context, field_map, field_map.transform(self.value)

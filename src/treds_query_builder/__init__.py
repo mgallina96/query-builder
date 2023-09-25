@@ -1,2 +1,0 @@
-class ApiSortingSyntaxError(Exception):
-    pass

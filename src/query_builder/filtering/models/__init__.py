@@ -1,33 +1,19 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable
+from typing import Any
 
-from treds_query_builder.filtering.errors import ApiFiltersSyntaxError
+from query_builder.filtering.errors import QueryBuilderFiltersSyntaxError
+from query_builder.shared.models import FieldMap
 
 
 class CompilationContext:
     params: dict[str, Any]
     param_counters: dict[str, int]
+    included_fields: set[str]
 
     def __init__(self):
         self.params = {}
         self.param_counters = {}
-
-
-class FieldMap:
-    name: str
-    database_column: Any
-
-    _transform_function: Callable
-
-    def __init__(
-        self, name: str, database_column: Any, transform_function: Callable = None
-    ):
-        self.name = name
-        self.database_column = database_column
-        self._transform_function = transform_function or (lambda x: x)
-
-    def transform(self, value: Any) -> Any:
-        return self._transform_function(value)
+        self.included_fields = set()
 
 
 class CompilationConfig:
@@ -53,19 +39,19 @@ class CompilationConfig:
         try:
             return self._operators_map.get(code)
         except KeyError:
-            raise ApiFiltersSyntaxError(f"Unknown operator: {code}")
+            raise QueryBuilderFiltersSyntaxError(f"Unknown operator: {code}")
 
     def get_condition(self, name: str) -> "AbstractCondition":
         try:
             return self._conditions_map.get(name)
         except KeyError:
-            raise ApiFiltersSyntaxError(f"Unknown condition: {name}")
+            raise QueryBuilderFiltersSyntaxError(f"Unknown condition: {name}")
 
     def get_field(self, name: str) -> FieldMap:
         try:
             return self._fields_mapping.get(name)
         except KeyError:
-            raise ApiFiltersSyntaxError(f"Unknown field: {name}")
+            raise QueryBuilderFiltersSyntaxError(f"Unknown field: {name}")
 
 
 class AbstractFilterRule(ABC):

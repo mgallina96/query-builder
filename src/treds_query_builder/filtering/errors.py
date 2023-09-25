@@ -1,2 +1,0 @@
-class ApiFiltersSyntaxError(Exception):
-    pass
