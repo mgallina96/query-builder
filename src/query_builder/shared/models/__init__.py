@@ -18,3 +18,14 @@ class FieldMap:
         if isinstance(value, list):
             return [self._transform_function(v) for v in value]
         return self._transform_function(value)
+
+
+class CompilationContext:
+    params: dict[str, Any]
+    param_counters: dict[str, int]
+    included_fields: set[str]
+
+    def __init__(self):
+        self.params = {}
+        self.param_counters = {}
+        self.included_fields = set()

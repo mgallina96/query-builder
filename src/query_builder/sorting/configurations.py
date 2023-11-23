@@ -16,14 +16,3 @@ def default_sort_config(fields_mapping: list[FieldMap]) -> CompilationConfig:
         directions=default_all_directions,
         syntax_types=[SortRule],
     )
-
-
-def from_legacy_params(fields_map: dict) -> CompilationConfig:
-    fields_mapping = [
-        FieldMap(
-            name=field_name,
-            database_column=fields_map.get(field_name),
-        )
-        for field_name in fields_map
-    ]
-    return default_sort_config(fields_mapping)

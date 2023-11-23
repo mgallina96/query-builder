@@ -6,11 +6,10 @@ from query_builder.filtering.configurations import (
 from query_builder.filtering.models import (
     AbstractFilterRule,
     CompilationConfig,
-    CompilationContext,
 )
 from query_builder.filtering.models.conditions import Conditions
 from query_builder.filtering.models.rules import ComplexFilterRule, SimpleFilterRule
-from query_builder.shared.models import FieldMap
+from query_builder.shared.models import FieldMap, CompilationContext
 
 
 def apply_filters(
@@ -28,7 +27,7 @@ def apply_filters(
     :param fields_map: the mapping between the 'field' inside the filter and the SqlAlchemy Column.
     :param queries: the queries to process.
     :param config: configuration to use to parse the filters.
-    :param statement: where statement to use instead of parsing the filters.
+    :param statement: WHERE statement to use instead of parsing the filters.
     :return: the queries with the filters applied.
     """
     if not filters:

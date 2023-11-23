@@ -6,9 +6,8 @@ from sqlalchemy import bindparam, func, not_, text
 from query_builder.filtering.models import (
     AbstractOperator,
     CompilationConfig,
-    CompilationContext,
 )
-from query_builder.shared.models import FieldMap
+from query_builder.shared.models import FieldMap, CompilationContext
 
 
 class Operators(Enum):

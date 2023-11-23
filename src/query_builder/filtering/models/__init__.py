@@ -2,18 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from query_builder.filtering.errors import QueryBuilderFiltersSyntaxError
-from query_builder.shared.models import FieldMap
-
-
-class CompilationContext:
-    params: dict[str, Any]
-    param_counters: dict[str, int]
-    included_fields: set[str]
-
-    def __init__(self):
-        self.params = {}
-        self.param_counters = {}
-        self.included_fields = set()
+from query_builder.shared.models import FieldMap, CompilationContext
 
 
 class CompilationConfig:

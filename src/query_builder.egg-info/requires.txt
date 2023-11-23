@@ -1,2 +1,2 @@
-SQLAlchemy>=2.0.21
-pydantic>=2.3.0
+SQLAlchemy>=2.0.23
+pydantic>=2.5.2

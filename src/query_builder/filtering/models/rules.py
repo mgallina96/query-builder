@@ -3,8 +3,8 @@ from typing import Any
 from query_builder.filtering.models import (
     AbstractFilterRule,
     CompilationConfig,
-    CompilationContext,
 )
+from query_builder.shared.models import CompilationContext
 
 
 class SimpleFilterRule(AbstractFilterRule):
