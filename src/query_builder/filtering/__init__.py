@@ -9,12 +9,12 @@ from query_builder.filtering.models import (
     CompilationContext,
 )
 from query_builder.filtering.models.conditions import Conditions
-from query_builder.filtering.models.rules import ComplexFilterRule
+from query_builder.filtering.models.rules import ComplexFilterRule, SimpleFilterRule
 from query_builder.shared.models import FieldMap
 
 
 def apply_filters(
-    filters: dict | AbstractFilterRule | None,
+    filters: AbstractFilterRule | None,
     fields_map: list[FieldMap],
     *queries,
     config: CompilationConfig = None,
@@ -41,11 +41,11 @@ def apply_filters(
 
 
 def build_filters(
-    filters: dict | AbstractFilterRule,
+    filters: AbstractFilterRule,
     fields_map: list[FieldMap],
     context: CompilationContext,
     config: CompilationConfig = None,
-) -> tuple[Any, set[str]]:
+) -> tuple[Any, CompilationContext]:
     """
     Parse the filters and build the corresponding SQL where statement.
     Also returns the list of fields that appear in the filters.
@@ -54,26 +54,25 @@ def build_filters(
     :param fields_map: the mapping between the 'field' inside the filter and the SqlAlchemy Column.
     :param context: the compilation context to use. Contains parameters and internals of the compilation.
     :param config: configuration to use to parse the filters.
-    :return: the where statement and the set of included fields.
+    :return: the WHERE statement and the set of included fields.
     """
     config = config or default_filters_config(fields_map)
-    statement = try_parse_dict(filters, config).compile(config, context)
-    return statement, context.included_fields
+    statement = filters.compile(config, context)
+    return statement, context
 
 
 def try_parse_dict(
-    filters: dict | AbstractFilterRule, config: CompilationConfig
+    filters: dict, *, syntax_types: list[type[AbstractFilterRule]] = None
 ) -> AbstractFilterRule:
     """
-    Try to parse the filters using the given configuration.
+    Try to parse the filters.
 
     :param filters: the filters to parse.
-    :param config: the configuration to use to parse the filters.
+    :param syntax_types: the syntax types to use to parse the filters.
     :return: the AbstractFilterRule object parsed from the input.
     """
-    if isinstance(filters, AbstractFilterRule):
-        return filters
-    for syntax_type in config.syntax_types:
+    syntax_types = syntax_types or [ComplexFilterRule, SimpleFilterRule]
+    for syntax_type in syntax_types:
         rule = syntax_type.try_parse_dict(filters)
         if rule:
             return rule

@@ -4,7 +4,7 @@ import pytest
 from sqlalchemy import text
 from sqlalchemy.future import select
 
-from query_builder.filtering import apply_filters
+from query_builder.filtering import apply_filters, try_parse_dict
 from query_builder.shared.models import FieldMap
 
 
@@ -45,7 +45,7 @@ from query_builder.shared.models import FieldMap
 def test_apply_filters(filters: dict[str, Any], expected_result: str):
     query = select(text("* from TestEntity"))
     (query,) = apply_filters(
-        filters,
+        try_parse_dict(filters),
         [
             FieldMap(
                 name="id",

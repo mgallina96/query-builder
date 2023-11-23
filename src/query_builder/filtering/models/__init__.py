@@ -37,19 +37,19 @@ class CompilationConfig:
 
     def get_operator(self, code: str) -> "AbstractOperator":
         try:
-            return self._operators_map.get(code)
+            return self._operators_map[code]
         except KeyError:
             raise QueryBuilderFiltersSyntaxError(f"Unknown operator: {code}")
 
     def get_condition(self, name: str) -> "AbstractCondition":
         try:
-            return self._conditions_map.get(name)
+            return self._conditions_map[name]
         except KeyError:
             raise QueryBuilderFiltersSyntaxError(f"Unknown condition: {name}")
 
     def get_field(self, name: str) -> FieldMap:
         try:
-            return self._fields_mapping.get(name)
+            return self._fields_mapping[name]
         except KeyError:
             raise QueryBuilderFiltersSyntaxError(f"Unknown field: {name}")
 

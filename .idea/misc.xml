@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="Black">
-    <option name="executionMode" value="BINARY" />
-    <option name="pathToExecutable" value="C:\Users\manue\AppData\Local\Programs\Python\Python311\Scripts\black.exe" />
-    <option name="sdkUUID" value="57f99f06-5225-41f2-a13b-967cf8bdbd35" />
-  </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (QueryBuilder)" project-jdk-type="Python SDK" />
-</project>

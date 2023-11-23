@@ -37,6 +37,6 @@ class NotCondition(AbstractCondition):
         super().__init__(name)
 
     def join(self, compiled_rules: list):
-        if len(compiled_rules) > 1:
-            raise QueryBuilderFiltersSyntaxError("'not' condition can only have one rule")
+        if len(compiled_rules) != 1:
+            raise QueryBuilderFiltersSyntaxError("'not' condition must have exactly one rule")
         return not_(compiled_rules[0])
