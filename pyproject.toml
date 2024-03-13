@@ -4,18 +4,18 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "query_builder"
-version = "2.0.1"
+version = "3.0.0"
 authors = [
   { name="Manuel Gallina", email="manuel.gallina@3ds.team" },
 ]
 description = "Utility library to build QueryBuilder filters and sorts"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "SQLAlchemy >= 2.0.23",
-    "pydantic >= 2.5.2",
+    "SQLAlchemy >= 2.0.28",
+    "pydantic >= 2.6.4",
 ]
