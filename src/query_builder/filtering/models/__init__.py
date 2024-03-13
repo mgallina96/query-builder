@@ -24,8 +24,12 @@ class CompilationConfig:
         self._conditions_map = {condition.name: condition for condition in conditions}
         self.syntax_types = syntax_types
 
-    def get_operator(self, code: str) -> "AbstractOperator":
+    def get_operator(self, code: str, field: FieldMap) -> "AbstractOperator":
         try:
+            if code in field.blocked_operators:
+                raise QueryBuilderFiltersSyntaxError(
+                    f"Operator {code} is blocked for field {field.name}"
+                )
             return self._operators_map[code]
         except KeyError:
             raise QueryBuilderFiltersSyntaxError(f"Unknown operator: {code}")

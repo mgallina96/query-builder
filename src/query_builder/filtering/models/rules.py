@@ -20,7 +20,7 @@ class SimpleFilterRule(AbstractFilterRule):
     def compile(self, config: CompilationConfig, context: CompilationContext):
         context.included_fields.add(self.field)
         field_map = config.get_field(self.field)
-        return config.get_operator(self.operator).apply(
+        return config.get_operator(self.operator, field_map).apply(
             config, context, field_map, field_map.transform(self.value)
         )
 

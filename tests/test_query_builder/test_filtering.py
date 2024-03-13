@@ -5,6 +5,8 @@ from sqlalchemy import text
 from sqlalchemy.future import select
 
 from query_builder.filtering import apply_filters, try_parse_dict
+from query_builder.filtering.errors import QueryBuilderFiltersSyntaxError
+from query_builder.filtering.models.operators import EqualsOperator
 from query_builder.shared.models import FieldMap
 
 
@@ -59,3 +61,32 @@ def test_apply_filters(filters: dict[str, Any], expected_result: str):
         query,
     )
     assert str(query) == expected_result
+
+
+# noinspection SqlDialectInspection,SqlNoDataSourceInspection
+def test_blocked_operator():
+    with pytest.raises(QueryBuilderFiltersSyntaxError):
+        apply_filters(
+            try_parse_dict({"field": "id", "operator": "equal", "value": 1}),
+            [
+                FieldMap(
+                    name="id",
+                    database_column=text("TestEntity.id"),
+                    blocked_operators={EqualsOperator().code},
+                )
+            ],
+            select(text("* from TestEntity")),
+        )
+
+    (query,) = apply_filters(
+        try_parse_dict({"field": "id", "operator": "greaterthanorequal", "value": 1}),
+        [
+            FieldMap(
+                name="id",
+                database_column=text("TestEntity.id"),
+                blocked_operators={EqualsOperator().code},
+            )
+        ],
+        select(text("* from TestEntity")),
+    )
+    assert str(query) == "SELECT * from TestEntity \nWHERE :id_0 <= TestEntity.id"
